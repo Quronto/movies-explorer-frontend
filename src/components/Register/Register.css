@@ -42,7 +42,11 @@
   border: none;
   border-bottom: 1px solid rgb(66, 66, 66);
   padding-bottom: 9px;
-  margin-bottom: 24px;
+}
+
+.register__input:focus {
+  border-color: #36f5e5;
+  box-shadow: 0 0 8px #36f5e5;
 }
 
 .register__input:nth-child(3n) {
@@ -56,6 +60,7 @@
   font-weight: 400;
   line-height: normal;
   margin-top: 6px;
+  height: 24px;
 }
 
 .register__button {
@@ -64,12 +69,17 @@
   font-weight: 500;
   line-height: normal;
   margin-top: 133px;
-  background-color: #4285f4;
+  background-color: #4285F4;
   border: none;
   border-radius: 3px;
   max-width: 396px;
   height: 45px;
   cursor: pointer;
+}
+
+.register__button:disabled {
+  background-color: #F8F8F8;
+  color: #C2C2C2;
 }
 
 .register__button_type_signin {
@@ -88,7 +98,7 @@
 }
 
 .register__text {
-  color: #8b8b8b;
+  color: #8B8B8B;
   font-size: 14px;
   font-weight: 400;
   line-height: normal;
@@ -96,7 +106,7 @@
 }
 
 .register__auth {
-  color: #4285f4;
+  color: #4285F4;
   font-size: 14px;
   font-weight: 400;
   line-height: normal;

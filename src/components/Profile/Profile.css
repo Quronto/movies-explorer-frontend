@@ -1,19 +1,19 @@
 .profile {
+  display: flex;
+  flex-direction: column;
   max-width: 410px;
   width: 100%;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
 }
 
 .profile__title {
   color: #fff;
   text-align: center;
+  font-size: 24px;
+  font-weight: 500;
   line-height: normal;
   margin: 0;
   margin-top: 74px;
-  font-size: 24px;
-  font-weight: 500;
 }
 
 .profile__name {
@@ -37,12 +37,17 @@
   color: #fff;
   border: none;
   text-align: right;
-  justify-content: space-between;
   font-size: 11px;
   font-weight: 400;
   line-height: normal;
   padding: 0;
   display: flex;
+  justify-content: space-between;
+}
+
+.profile__input:focus {
+  border-color: #36f5e5;
+  box-shadow: 0 0 8px #36f5e5;
 }
 
 .profile__container {
@@ -70,26 +75,31 @@
 
 .profile__change {
   color: #fff;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 400;
   line-height: normal;
   background-color: inherit;
   border: none;
   margin-bottom: 16px;
   cursor: pointer;
-  text-align: center;
-  font-size: 13px;
-  font-weight: 400;
+}
+
+.profile__change:disabled {
+  color: #f8f8f8;
+  opacity: 0.6;
 }
 
 .profile__sign-out {
   color: #ee3465;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
   line-height: normal;
   background-color: inherit;
   border: none;
   cursor: pointer;
   text-decoration: none;
-  text-align: center;
-  font-size: 13px;
-  font-weight: 500;
 }
 
 .hover:hover {
@@ -101,13 +111,13 @@
   color: #fff;
   font-size: 14px;
   font-weight: 500;
+  line-height: normal;
+  background-color: #36f5e5;
+  border: none;
+  border-radius: 3px;
   max-width: 396px;
   height: 45px;
   cursor: pointer;
-  line-height: normal;
-  background-color: #4285f4;
-  border: none;
-  border-radius: 3px;
 }
 
 .profile__save:disabled {
@@ -118,11 +128,11 @@
 
 .profile__error {
   color: #ff004c;
-  line-height: normal;
-  margin-bottom: 20px;
   text-align: center;
   font-size: 11px;
   font-weight: 400;
+  line-height: normal;
+  margin-bottom: 20px;
 }
 
 @media screen and (max-width: 768px) {

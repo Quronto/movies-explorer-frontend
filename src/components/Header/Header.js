@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navigation from '../Navigation/Navigation';
 import PopupNavigation from '../PopupNavigation/PopupNavigation';
-import AccIcon from '../../images/AccIcon.svg';
 import './Header.css';
 import headerLogo from '../../images/headerLogo.svg';
-import { Link, useLocation } from 'react-router-dom';
+import AccIcon from '../../images/AccIcon.svg';
+import { Link, NavLink } from 'react-router-dom';
+
+
 
 function Header(props) {
-  const location = useLocation();
   const [isOpen, setOpen] = useState(false);
 
   function PopupNavigationOpen() {
@@ -18,35 +19,50 @@ function Header(props) {
     setOpen(false);
   }
 
+  useEffect(() => {
+    function closeByEscape(evt) {
+      if (evt.key === 'Escape') {
+        closePopup();
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener('keydown', closeByEscape);
+      return () => {
+        document.removeEventListener('keydown', closeByEscape);
+      }
+    }
+  }, [isOpen])
+
   return (
     <header style={{ backgroundColor: `${props.backgroundColor}` }} className='header'>
       <div className='header__content'>
         <Link to={props.iconLink}>
-          <img className='header__logo' src={headerLogo} alt='Лого проекта'></img>
+          <img className='header__icon' src={headerLogo} alt='логотип проекта'></img>
         </Link>
         <div className='header__container'>
           <nav className='header__nav'>
-            <Navigation
-              text="Фильмы"
-              textSave="Сохранённые фильмы"
-              linkText="/movies"
-              linkTextSave="/saved-movies"
-            />
-            <ul className={location.pathname === '/' ? 'header__option' : 'header__option-show'}>
-              {location.pathname === '/' ? (
-                <>
-                  <li><Link to={props.linkSignUp} className='header__sign-up'>{props.signUp}</Link></li>
-                  <li><Link to={props.linkSignIn} className='header__sign-in'>{props.signIn}</Link></li>
-                </>
-              ) :
-                <div className='header__account-container'>
-                  <Link to={props.linkProfile} className='header__account hover'>Аккаунт</Link>
-                  <Link to={props.linkProfile} className='header__cover'>
-                    <img src={AccIcon} alt='Аккаунт-иконка' className='header__account-logo hover'></img>
-                  </Link>
+            {props.loggedIn ? (
+              <>
+                <Navigation
+                  text="Фильмы"
+                  textSave="Сохранённые фильмы"
+                  linkText="/movies"
+                  linkTextSave="/saved-movies"
+                />
+                <div className='header__container-account'>
+                  <NavLink to={'/profile'} className='header__account hover'>Аккаунт</NavLink>
+                  <NavLink to={props.linkProfile} className='header__cover'>
+                    <img src={AccIcon} alt='Аккаунт-иконка' className='header__account-icon hover'></img>
+                  </NavLink>
                 </div>
-              }
-            </ul>
+              </>
+            ) : (
+              <ul className='header__auth'>
+                <li><NavLink to={props.linkSignUp} className='header__sign-up'>{props.signUp}</NavLink></li>
+                <li><NavLink to={props.linkSignIn} className='header__sign-in'>{props.signIn}</NavLink></li>
+              </ul>
+            )}
           </nav>
           {isOpen && (
             <PopupNavigation
@@ -60,7 +76,7 @@ function Header(props) {
               onClose={closePopup}
             />
           )}
-          <div className={location.pathname === '/' ? 'header__menu-hidden' : 'header__menu'} onClick={PopupNavigationOpen}>
+          <div className={!props.loggedIn ? 'header__menu-hidden' : 'header__menu'} onClick={PopupNavigationOpen}>
             <span className='header__line'></span>
             <span className='header__line'></span>
             <span className='header__line'></span>

@@ -10,7 +10,7 @@ function Portfolio() {
           <a target="_blank" href="https://quronto.github.io/how-to-learn/index.html" className="portfolio__link" rel="noreferrer">Статичный сайт<i className='portfolio__link-icon'></i></a>
         </li>
         <li className='portfolio__item'>
-          <a target="_blank" href="https://Quronto.github.io/russian-travel/index.html" className="portfolio__link" rel="noreferrer">Адаптивный сайт<i className='portfolio__link-icon'></i></a>
+          <a target="_blank" href="https://quronto.github.io/russian-travel/index.html" className="portfolio__link" rel="noreferrer">Адаптивный сайт<i className='portfolio__link-icon'></i></a>
         </li>
         <li className='portfolio__item'>
           <a target="_blank" href="https://quronto.nomoreparties.co" className="portfolio__link" rel="noreferrer">Одностраничное приложение<i className='portfolio__link-icon'></i></a>
