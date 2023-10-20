@@ -58,9 +58,12 @@ function App() {
       .finally(handleInfoTooltip)
   }
 
+  const location = useLocation();
+  const path = location.pathname;
+
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
-    if (jwt) {
+    if (jwt && path !== '*') {
       auth.getToken(jwt)
         .then((res) => {
           if (res) {
@@ -79,6 +82,9 @@ function App() {
     localStorage.removeItem("AllMovies");
     localStorage.removeItem("firstSearch");
     localStorage.removeItem("searchTextMovie");
+    localStorage.removeItem("isCheckedSavedMovies");
+    localStorage.removeItem("filterDataSavedMovies");
+    localStorage.removeItem("searchTextSavedMovie");
     for (let i = 0; i <= 1000; i++) {
       const like = `like-${i}`;
       localStorage.removeItem(like);
