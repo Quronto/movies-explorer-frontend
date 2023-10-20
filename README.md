@@ -9,4 +9,4 @@ Frontend https://movies.quronto.nomoredomainsrocks.ru
 
 Backend https://api.movies.quronto.nomoredomainsicu.ru
 
-__Ссылка на Pull requests:__ 
+__Ссылка на Pull requests:__ https://github.com/Quronto/movies-explorer-frontend/pull/2
