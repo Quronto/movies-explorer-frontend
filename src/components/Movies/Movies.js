@@ -98,8 +98,11 @@ function Movies(props) {
             <MoviesCardList
               cards={filterCards.slice(0, visibleCards)}
               errorMovie={errorMovie}
+              loading={isLoading}
+              onAddCardToSaved={props.onAddCardToSaved}
               onRemoveCardMovieCard={props.onRemoveCardMovieCard}
               savedCards={props.savedCards}
+              setSavedCards={props.setSavedCards}
               isNotFound={isNotFound}
             />
           )
