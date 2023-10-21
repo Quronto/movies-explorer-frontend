@@ -7,11 +7,11 @@ function FilterCheckbox(props) {
   const handleCheckboxChange = () => {
     const newValue = !isChecked;
     onCheckboxChange(newValue);
-    localStorage.setItem('isChecked', newValue.toString());
+    localStorage.setItem('isCheckedMovies', newValue.toString());
   };
 
   useEffect(() => {
-    const savedCheckboxState = localStorage.getItem('isChecked');
+    const savedCheckboxState = localStorage.getItem('isCheckedMovies');
     if (savedCheckboxState === 'true') {
       onCheckboxChange(true);
     }
