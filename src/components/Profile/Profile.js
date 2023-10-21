@@ -28,12 +28,6 @@ function Profile(props) {
     });
   }, [currentUser, setValues]);
 
-  function handleNameKeyDown(e) {
-    if (e.key === ' ') {
-      e.preventDefault();
-    }
-  }
-
   function handleSaveButton() {
     setSave(true);
     setIsEditing(true);
@@ -74,7 +68,6 @@ function Profile(props) {
                 maxLength={40}
                 value={values.name || currentUser.name}
                 onChange={handleChange}
-                onKeyDown={handleNameKeyDown}
                 disabled={!isSave ? isEditing : !isEditing}
               />
             </div>
@@ -90,7 +83,6 @@ function Profile(props) {
                 minLength={8}
                 value={values.email || currentUser.email}
                 onChange={handleChange}
-                onKeyDown={handleNameKeyDown}
                 disabled={!isSave ? isEditing : !isEditing}
               />
             </div>
