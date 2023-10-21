@@ -70,7 +70,7 @@ function Movies(props) {
   }, []);
 
   useEffect(() => {
-    const localStorageMovies = localStorage.getItem('filterData');
+    const localStorageMovies = localStorage.getItem('filterMovies');
     const filteredMovies = JSON.parse(localStorageMovies);
     if (filteredMovies) {
 

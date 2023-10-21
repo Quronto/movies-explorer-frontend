@@ -82,9 +82,6 @@ function App() {
     localStorage.removeItem("AllMovies");
     localStorage.removeItem("firstSearch");
     localStorage.removeItem("searchTextMovie");
-    localStorage.removeItem("isCheckedSavedMovies");
-    localStorage.removeItem("filterDataSavedMovies");
-    localStorage.removeItem("searchTextSavedMovie");
     for (let i = 0; i <= 1000; i++) {
       const like = `like-${i}`;
       localStorage.removeItem(like);

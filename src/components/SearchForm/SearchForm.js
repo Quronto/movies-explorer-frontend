@@ -52,7 +52,7 @@ function SearchForm(props) {
           );
 
           props.filterCards(filterData);
-          localStorage.setItem("filterData", JSON.stringify(filterData));
+          localStorage.setItem("filterMovies", JSON.stringify(filterData));
           localStorage.setItem('firstSearch', 'true');
         })
         .catch(() => {
@@ -72,7 +72,7 @@ function SearchForm(props) {
       );
 
       props.filterCards(filterData);
-      localStorage.setItem("filterData", JSON.stringify(filterData));
+      localStorage.setItem("filterMovies", JSON.stringify(filterData));
       props.setIsLoading(false);
     }
   }
@@ -87,7 +87,7 @@ function SearchForm(props) {
   function handleFilterChange(isChecked) {
     setShortFilm(isChecked);
 
-    const getFilerData = localStorage.getItem('filterData');
+    const getFilerData = localStorage.getItem('filterMovies');
     const filerData = JSON.parse(getFilerData);
 
     const filterDataFil = filerData.filter(({ nameRU, nameEN, duration }) =>
