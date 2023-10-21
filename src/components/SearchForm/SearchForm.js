@@ -77,25 +77,55 @@ function SearchForm(props) {
     }
   }
 
+  // function handleFilmChange(evt) {
+  //   const newFilmValue = evt.target.value;
+  //   setFilm(newFilmValue);
+  //   localStorage.setItem('searchTextMovie', newFilmValue);
+  //   setError('');
+  // }
+
+  // function handleFilterChange(isChecked) {
+  //   setShortFilm(isChecked);
+
+  //   const getFilerData = localStorage.getItem('filterMovies');
+  //   const filerData = JSON.parse(getFilerData);
+
+  //   const filterDataFil = filerData.filter(({ nameRU, nameEN, duration }) =>
+  //     (nameRU.toLowerCase().includes(film.toLowerCase()) || nameEN.toLowerCase().includes(film.toLowerCase())) && (!isChecked || duration <= 40)
+  //   );
+
+  //   props.filterCards(filterDataFil);
+  // }
+
   function handleFilmChange(evt) {
     const newFilmValue = evt.target.value;
     setFilm(newFilmValue);
     localStorage.setItem('searchTextMovie', newFilmValue);
     setError('');
   }
-
+  
   function handleFilterChange(isChecked) {
     setShortFilm(isChecked);
-
+  
     const getFilerData = localStorage.getItem('filterMovies');
-    const filerData = JSON.parse(getFilerData);
-
-    const filterDataFil = filerData.filter(({ nameRU, nameEN, duration }) =>
-      (nameRU.toLowerCase().includes(film.toLowerCase()) || nameEN.toLowerCase().includes(film.toLowerCase())) && (!isChecked || duration <= 40)
+    const filterData = JSON.parse(getFilerData);
+  
+    // Сначала фильтруем короткометражные фильмы, если чекбокс включен
+    let filteredData = filterData;
+    if (isChecked) {
+      filteredData = filterData.filter((movie) => movie.duration <= 40);
+    }
+  
+    // Затем выполняем поиск в уже отфильтрованных данных
+    const filteredAndSearchedData = filteredData.filter(({ nameRU, nameEN }) =>
+      nameRU.toLowerCase().includes(film.toLowerCase()) || nameEN.toLowerCase().includes(film.toLowerCase())
     );
-
-    props.filterCards(filterDataFil);
+  
+    props.filterCards(filteredAndSearchedData);
   }
+  
+
+
 
   useEffect(() => {
     const savedTextMovie = localStorage.getItem('searchTextMovie');
