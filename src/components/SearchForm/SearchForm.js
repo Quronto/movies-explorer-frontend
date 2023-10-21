@@ -1,14 +1,15 @@
 import './SearchForm.css';
 import React, { useState, useEffect } from 'react';
-import SearchIcon from '../../images/SearchIcon.svg'
+import SearchIcon from '../../images/SearchIcon.svg';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import apiMovies from "../../utils/MoviesApi";
 import MainApi from "../../utils/MainApi";
 
 function SearchForm(props) {
-  const [film, setFilm] = useState('');
+  const [film, setFilm] = useState(localStorage.getItem('searchTextMovie') || '');
   const [shortFilm, setShortFilm] = useState(false);
   const [error, setError] = useState('');
+  const [isFilteringRequired, setIsFilteringRequired] = useState(false);
 
   const [isFirstSubmit, setIsFirstSubmit] = useState(false);
 
@@ -25,27 +26,41 @@ function SearchForm(props) {
           console.error('Ошибка при получении фильмов:', error);
         });
     }
-  }, [isFirstSubmit])
+  }, [isFirstSubmit]);
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  useEffect(() => {
+    const cardsAreAlreadyDisplayed = props.cards.length > 0;
 
-    if (!film.trim()) {
-      setError('Нужно ввести ключевое слово');
-      return;
+    if (cardsAreAlreadyDisplayed) {
+      if (isFilteringRequired) {
+        const filterDataFil = props.cards.filter(({ duration }) =>
+          (!shortFilm || duration <= 40)
+        );
+        props.filterCards(filterDataFil);
+        localStorage.setItem("filterMovies", JSON.stringify(filterDataFil));
+        setIsFilteringRequired(false);
+      }
     }
-    
-    localStorage.setItem('searchTextMovie', film);
-    
-    setError('');
-    
-    const isFirstSearch = localStorage.getItem('firstSearch') === 'false';
-    
-    if (isFirstSearch) {
-      setIsFirstSubmit(true);
-      apiMovies.getCards()
-        .then((newCards) => {
-          props.setIsLoading(true);
+  }, [shortFilm, props.cards, isFilteringRequired]);
+
+  useEffect(() => {
+    const searchMovies = async () => {
+      if (!film.trim()) {
+        setError('Нужно ввести ключевое слово');
+        return;
+      }
+
+      localStorage.setItem('searchTextMovie', film);
+      setError('');
+
+      const isFirstSearch = localStorage.getItem('firstSearch') === 'false';
+
+      if (isFirstSearch) {
+        setIsFirstSubmit(true);
+        props.setIsLoading(true);
+
+        try {
+          const newCards = await apiMovies.getCards();
           localStorage.setItem('AllMovies', JSON.stringify(newCards));
           const filterData = newCards.filter(({ nameRU, nameEN, duration }) =>
             (nameRU.toLowerCase().includes(film.toLowerCase()) || nameEN.toLowerCase().includes(film.toLowerCase())) && (!shortFilm || duration <= 40)
@@ -54,89 +69,47 @@ function SearchForm(props) {
           props.filterCards(filterData);
           localStorage.setItem("filterMovies", JSON.stringify(filterData));
           localStorage.setItem('firstSearch', 'true');
-        })
-        .catch(() => {
+        } catch (error) {
           props.setErrorMovie(`Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз`);
-        })
-        .finally(() => {
+        } finally {
           props.setIsLoading(false);
-        });
-    } else if (!isFirstSearch) {
+        }
+      } else if (!isFirstSearch) {
+        props.setIsLoading(true);
+        const getAllMovies = localStorage.getItem('AllMovies');
+        const allMovies = JSON.parse(getAllMovies);
 
-      props.setIsLoading(true);
-      const getAllMovies = localStorage.getItem('AllMovies');
-      const allMovies = JSON.parse(getAllMovies);
+        const filterData = allMovies.filter(({ nameRU, nameEN, duration }) =>
+          (nameRU.toLowerCase().includes(film.toLowerCase()) || nameEN.toLowerCase().includes(film.toLowerCase())) && (!shortFilm || duration <= 40)
+        );
 
-      const filterData = allMovies.filter(({ nameRU, nameEN, duration }) =>
-        (nameRU.toLowerCase().includes(film.toLowerCase()) || nameEN.toLowerCase().includes(film.toLowerCase())) && (!shortFilm || duration <= 40)
-      );
+        props.filterCards(filterData);
+        localStorage.setItem("filterMovies", JSON.stringify(filterData));
+        props.setIsLoading(false);
+      }
+    };
 
-      props.filterCards(filterData);
-      localStorage.setItem("filterMovies", JSON.stringify(filterData));
-      props.setIsLoading(false);
+    if (isFilteringRequired) {
+      searchMovies();
     }
-  }
-
-  // function handleFilmChange(evt) {
-  //   const newFilmValue = evt.target.value;
-  //   setFilm(newFilmValue);
-  //   localStorage.setItem('searchTextMovie', newFilmValue);
-  //   setError('');
-  // }
-
-  // function handleFilterChange(isChecked) {
-  //   setShortFilm(isChecked);
-
-  //   const getFilerData = localStorage.getItem('filterMovies');
-  //   const filerData = JSON.parse(getFilerData);
-
-  //   const filterDataFil = filerData.filter(({ nameRU, nameEN, duration }) =>
-  //     (nameRU.toLowerCase().includes(film.toLowerCase()) || nameEN.toLowerCase().includes(film.toLowerCase())) && (!isChecked || duration <= 40)
-  //   );
-
-  //   props.filterCards(filterDataFil);
-  // }
+  }, [film, shortFilm, isFilteringRequired]);
 
   function handleFilmChange(evt) {
     const newFilmValue = evt.target.value;
     setFilm(newFilmValue);
     localStorage.setItem('searchTextMovie', newFilmValue);
     setError('');
+    setIsFilteringRequired(true);
   }
-  
+
   function handleFilterChange(isChecked) {
     setShortFilm(isChecked);
-  
-    const getFilerData = localStorage.getItem('filterMovies');
-    const filterData = JSON.parse(getFilerData);
-  
-    // Сначала фильтруем короткометражные фильмы, если чекбокс включен
-    let filteredData = filterData;
-    if (isChecked) {
-      filteredData = filterData.filter((movie) => movie.duration <= 40);
-    }
-  
-    // Затем выполняем поиск в уже отфильтрованных данных
-    const filteredAndSearchedData = filteredData.filter(({ nameRU, nameEN }) =>
-      nameRU.toLowerCase().includes(film.toLowerCase()) || nameEN.toLowerCase().includes(film.toLowerCase())
-    );
-  
-    props.filterCards(filteredAndSearchedData);
+    setIsFilteringRequired(true);
   }
-  
-
-
-
-  useEffect(() => {
-    const savedTextMovie = localStorage.getItem('searchTextMovie');
-    if (savedTextMovie) {
-      setFilm(savedTextMovie);
-    }
-  }, []);
 
   return (
     <section className='search'>
-      <form className='search__form' onSubmit={handleSubmit}>
+      <form className='search__form'>
         <div className='search__container'>
           <img src={SearchIcon} alt='лупа' className='search__icon'></img>
           <input
@@ -147,13 +120,13 @@ function SearchForm(props) {
             onChange={handleFilmChange}
           />
           <div className='search__button-cover'>
-            <button type='submit' className='search__button'>Найти</button>
+            <button type='button' className='search__button' onClick={() => setIsFilteringRequired(true)}>Найти</button>
           </div>
         </div>
         <FilterCheckbox onCheckboxChange={handleFilterChange} isChecked={shortFilm} />
       </form>
     </section>
-  )
+  );
 }
 
 export default SearchForm;
