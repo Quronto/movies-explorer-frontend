@@ -3,7 +3,7 @@ import React from 'react';
 
 function MovieCardListShowMore(props) {
   return (
-      <button type='button' style={props.style} className='button-more'>Ещё</button>
+      <button type='button' style={props.style} className='button-more' onClick={props.handleLoadMore}>Ещё</button>
   )
 }
 
