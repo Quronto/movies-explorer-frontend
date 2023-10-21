@@ -11,7 +11,7 @@ function Movies(props) {
 
   const [errorMovie, setErrorMovie] = useState('');
   const [isNotFound, setIsNotFound] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [visibleCards, setVisibleCards] = useState(0);
 
